@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import twilio.twiml
 
 app = Flask(__name__)
@@ -27,6 +27,7 @@ def update_state():
 
     global sensor_states
     sensor_states[sensor_id] = sensor_val
+    return  ""
 
 @app.route("/states", methods=['GET'])
 def show_state():
@@ -43,3 +44,7 @@ def get_sensor_state_msg(sensor_id):
         return 'The bathroom is occupied.'
     else:
         return 'The bathroom is undefined.'
+
+if __name__ == '__main__':
+    app.debug = True
+    app.run()
