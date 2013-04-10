@@ -41,5 +41,5 @@ def get_sensor_state_msg(sensor_id):
         return 'The bathroom is vacant.'
     elif state == '1':
         return 'The bathroom is occupied.'
-    else
-        return 'The bathroom is undefined."
+    else:
+        return 'The bathroom is undefined.'
