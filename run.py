@@ -34,8 +34,7 @@ def update_state():
     sensor_val = request.form['sensor_val']
     sensor_time = int(time.time())
     global sensor_states
-    sensor_states[sensor_id]['status'] = sensor_val
-    sensor_states[sensor_id]['updated'] = sensor_time
+    sensor_states[sensor_id] = {'status': sensor_val, 'updated': sensor_time}
     return  ""
 
 @app.route("/states", methods=['GET'])
