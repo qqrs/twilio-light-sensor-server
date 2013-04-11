@@ -51,7 +51,7 @@ def web_state():
 def get_sensor_state_msg(sensor_id):
     global sensor_states
     sensor = sensor_states[sensor_id]
-    state = sensor.get(status)
+    state = sensor.get('status')
 
     if state == '0':
         return 'The bathroom is vacant.'
