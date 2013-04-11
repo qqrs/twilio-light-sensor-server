@@ -1,15 +1,17 @@
-from flask import Flask, request, render_template
-from datetime import datetime
+from flask import Flask, request, render_template, redirect, url_for
 import time
-#import twilio.twiml
+import twilio.twiml
 
 app = Flask(__name__)
 
 sensor_states = {}
 
-sensor_states = {u'upstairs-wc':{u'status':u'0', u'updated':1365694643}, 
-u'downstairs-wc':{u'status':u'1', u'updated':1365694613}, 
-u'sidestairs-wc':{u'status':u'0', u'updated':1365694543}}
+@app.route("/debug")
+def set_status():
+    global sensor_states
+    now = int(time.time())
+    sensor_states = {u'upstairs-wc':{u'status':u'0', u'updated':now}, u'downstairs-wc':{u'status':u'1', u'updated':now}, u'sidestairs-wc':{u'status':u'0', u'updated':now}}
+    return redirect('/')
 
 @app.route("/twilio/voice", methods=['POST'])
 def twilio_voice():
