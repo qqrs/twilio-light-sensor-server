@@ -52,8 +52,15 @@
 		  {% for sensor in sensors %}
 			 <tr>
 			 <td>{{ sensor }}</td>
-			 <td>{{ sensors.get(sensor, "unknown") }}</td>
-			 <td>{{ sensors.get(sensor, "unknown") }}</td>
+       {% if sensors[sensor].get('status',) == "0" %}
+        <td>vacant</td>
+        {% elif sensors[sensor].get('status',) == "1" %}
+        <td>occupied</td>
+        {% else %}
+        <td>unknown</td>
+        {% endif %}
+			 <td>{{ sensors[sensor].get('status', "unknown") }}</td>
+			 <td>{{ time - sensors[sensor].get('updated', 0) }} secs ago</td>
 			 </tr>
        {% endfor %}
 		{% else %}

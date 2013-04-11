@@ -1,15 +1,15 @@
 from flask import Flask, request, render_template
 from datetime import datetime
+import time
 #import twilio.twiml
 
 app = Flask(__name__)
 
 sensor_states = {}
 
-sensor_template={u'upstairs-wc':{u'status':u'0', u'updated':u'00:00:00 00-00-0000'}
-    u'downstairs-wc':{u'status':u'1', u'updated':u'00:00:00 00-00-0000'}
-    u'sidestairs-wc':{u'status':u'0', u'updated':u'00:00:00 00-00-0000'}
-}
+sensor_states = {u'upstairs-wc':{u'status':u'0', u'updated':1365694643}, 
+u'downstairs-wc':{u'status':u'1', u'updated':1365694613}, 
+u'sidestairs-wc':{u'status':u'0', u'updated':1365694543}}
 
 @app.route("/twilio/voice", methods=['POST'])
 def twilio_voice():
@@ -30,9 +30,10 @@ def update_state():
     """Update state following request from remote sensor."""
     sensor_id = request.form['sensor_id']
     sensor_val = request.form['sensor_val']
-    sensor_time = datetime.time(datetime.now())
+    sensor_time = int(time.time())
     global sensor_states
-    sensor_states[sensor_id] = sensor_val
+    sensor_states[sensor_id]['status'] = sensor_val
+    sensor_states[sensor_id]['updated'] = sensor_time
     return  ""
 
 @app.route("/states", methods=['GET'])
@@ -43,13 +44,13 @@ def show_state():
 @app.route("/", methods=['GET'])
 def web_state():
     global sensor_states
-    time = datetime.time(datetime.now())
-    return render_template('index.html', sensors=sensor_states)
+    now = int(time.time())
+    return render_template('index.html', sensors=sensor_states, time=now)
 
 def get_sensor_state_msg(sensor_id):
     global sensor_states
     sensor = sensor_states[sensor_id]
-    state = sensor_states.get(sensor_id)
+    state = sensor.get(status)
 
     if state == '0':
         return 'The bathroom is vacant.'
