@@ -5,6 +5,8 @@ import twilio.twiml
 app = Flask(__name__)
 
 sensor_states = {}
+allowed_sensor_ids = [u'upstairs-wc', u'downstairs-wc', u'sidestairs-wc']
+allowed_sensor_vals = [u'0', u'1']
 
 @app.route("/debug")
 def set_status():
@@ -30,8 +32,17 @@ def twilio_text():
 @app.route("/update", methods=['POST'])
 def update_state():
     """Update state following request from remote sensor."""
+    if 'sensor_id' not in request.form or 'sensor_val' not in request.form:
+        return ""
+
     sensor_id = request.form['sensor_id']
+    if sensor_id not in allowed_sensor_ids:
+        return ""
+
     sensor_val = request.form['sensor_val']
+    if sensor_val not in allowed_sensor_vals:
+        return ""
+
     sensor_time = int(time.time())
     global sensor_states
     sensor_states[sensor_id] = {'status': sensor_val, 'updated': sensor_time}
